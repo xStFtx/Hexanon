@@ -43,9 +43,9 @@ class HexagonCircuit:
         self.circuit.measure_all()
 
     def execute_circuit(self, backend, shots=1000, noise_model=None):
-        # Bind parameters with values
+        # Assign parameters with values
         parameter_values = {param: np.random.rand() for param in self.parameters}
-        bound_circuit = self.circuit.bind_parameters(parameter_values)
+        bound_circuit = self.circuit.assign_parameters(parameter_values, inplace=False)
 
         transpiled_circuit = transpile(bound_circuit, backend)
         job = execute(transpiled_circuit, backend, shots=shots, noise_model=noise_model)
@@ -53,9 +53,9 @@ class HexagonCircuit:
         return result.get_counts(bound_circuit)
 
     def visualize_state(self, filename='state_plot.png'):
-        # Bind parameters with values for visualization
+        # Assign parameters with values for visualization
         parameter_values = {param: np.random.rand() for param in self.parameters}
-        bound_circuit = self.circuit.bind_parameters(parameter_values)
+        bound_circuit = self.circuit.assign_parameters(parameter_values, inplace=False)
 
         state_simulator = Aer.get_backend('statevector_simulator')
         job = execute(bound_circuit, state_simulator)
